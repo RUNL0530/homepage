@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页 - 云端版</title>
+    <title>我的个人主页 - 完整版</title>
     <style>
         * {
             margin: 0;
@@ -20,20 +20,53 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* 登录状态栏 */
-        .user-bar {
+        /* 顶部工具栏 */
+        .top-bar {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 15px 25px;
+            padding: 20px 30px;
             margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #764ba2;
+        }
+
+        .search-btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* 用户栏 */
+        .user-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .user-info {
@@ -54,76 +87,8 @@
             color: #333;
         }
 
-        .sync-status {
-            font-size: 12px;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .sync-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
         .login-prompt {
-            text-align: center;
             color: #666;
-        }
-
-        /* 单词卡片 */
-        .word-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .word-title {
-            font-size: 48px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .word-phonetic {
-            font-size: 20px;
-            color: #888;
-            margin-bottom: 15px;
-        }
-
-        .word-meaning {
-            font-size: 18px;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .word-meaning.show {
-            display: block;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
         }
 
         button {
@@ -144,30 +109,8 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #764ba2;
-        }
-
-        .btn-secondary:hover {
-            background: #643a8a;
-        }
-
         .btn-login {
             background: #4285f4;
-        }
-
-        .btn-login:hover {
-            background: #3367d6;
         }
 
         .btn-logout {
@@ -176,8 +119,213 @@
             font-size: 14px;
         }
 
-        .btn-logout:hover {
-            background: #dc2626;
+        /* 倒计时卡片 */
+        .countdown-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .countdown-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .countdown-unit {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* 番茄钟 */
+        .pomodoro-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .pomodoro-timer {
+            font-size: 64px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .pomodoro-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        /* 待办事项 */
+        .todo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-input-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .todo-text {
+            flex: 1;
+        }
+
+        .todo-delete {
+            background: #ef4444;
+            padding: 5px 15px;
+            font-size: 14px;
+        }
+
+        /* 硬件项目笔记 */
+        .hardware-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .project-item {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .project-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        /* 单词卡片 */
+        .word-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .word-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .word-phonetic {
+            font-size: 20px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .word-meaning {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .word-meaning.show {
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         /* 网站导航 */
@@ -201,6 +349,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
+            margin-bottom: 15px;
         }
 
         .website-card {
@@ -234,132 +383,131 @@
             opacity: 0.9;
         }
 
-        .delete-site-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-            display: none;
-            padding: 0;
+        /* 两列布局 */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        .website-card:hover .delete-site-btn {
-            display: block;
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        /* 统计信息 */
-        .stats {
-            text-align: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #eee;
-            color: #666;
-            font-size: 14px;
+        @media (max-width: 1200px) {
+            .three-column {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* 添加网站按钮 */
-        .add-website-btn {
-            background: #10b981;
-            margin-top: 15px;
-        }
-
-        .add-website-btn:hover {
-            background: #059669;
-        }
-
-        /* 加载提示 */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-
-        /* 响应式设计 */
         @media (max-width: 768px) {
-            .word-title {
-                font-size: 36px;
-            }
-
-            .websites-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-
-            .user-bar {
-                flex-direction: column;
-                gap: 10px;
+            .two-column {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 用户登录状态栏 -->
-        <div class="user-bar">
-            <div id="userInfo" class="user-info">
-                <div class="login-prompt">🔐 请先登录以同步数据</div>
-            </div>
-            <div>
-                <button id="loginBtn" class="btn-login" onclick="login()">🚀 Google登录</button>
-                <button id="logoutBtn" class="btn-logout" onclick="logout()" style="display: none;">退出登录</button>
-            </div>
-        </div>
-
-        <!-- 单词学习卡片 -->
-        <div class="word-card">
-            <div class="word-title" id="word">Loading...</div>
-            <div class="word-phonetic" id="phonetic"></div>
-            <div class="word-meaning" id="meaning"></div>
-
-            <div class="button-group">
-                <button onclick="toggleMeaning()">显示/隐藏释义</button>
-                <button onclick="nextWord()" class="btn-secondary">换一个单词</button>
+        <!-- 顶部工具栏 -->
+        <div class="top-bar">
+            <!-- 搜索框 -->
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="快速搜索 Google / 百度 / GitHub..." onkeypress="if(event.key==='Enter') quickSearch()">
+                <button class="search-btn" onclick="quickSearch()">🔍 搜索</button>
             </div>
 
-            <div class="stats">
-                今日已学：<strong id="todayCount">0</strong> 个单词
-                <span id="syncStatus" class="sync-status" style="display: none;">
-                    <span class="sync-indicator"></span>
-                    已同步到云端
-                </span>
+            <!-- 用户栏 -->
+            <div class="user-bar">
+                <div id="userInfo" class="user-info">
+                    <div class="login-prompt">🔐 请先登录以同步数据</div>
+                </div>
+                <div>
+                    <button id="loginBtn" class="btn-login" onclick="login()">🚀 Google登录</button>
+                    <button id="logoutBtn" class="btn-logout" onclick="logout()" style="display: none;">退出登录</button>
+                </div>
             </div>
         </div>
 
-        <!-- 常用网站导航 -->
+        <!-- 三列布局：倒计时、番茄钟、单词 -->
+        <div class="three-column">
+            <!-- 倒计时 -->
+            <div class="countdown-card">
+                <div class="countdown-title">📅 距离六级考试</div>
+                <div class="countdown-display" id="countdownDays">-</div>
+                <div class="countdown-unit">天</div>
+                <button onclick="setExamDate()" style="margin-top: 15px; font-size: 14px; padding: 8px 20px;">设置日期</button>
+            </div>
+
+            <!-- 番茄钟 -->
+            <div class="pomodoro-card">
+                <div class="countdown-title">🍅 番茄钟</div>
+                <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+                <div class="pomodoro-controls">
+                    <button class="btn-success" onclick="startPomodoro()">开始</button>
+                    <button class="btn-warning" onclick="pausePomodoro()">暂停</button>
+                    <button class="btn-danger" onclick="resetPomodoro()">重置</button>
+                </div>
+                <div style="margin-top: 15px; color: #666; font-size: 14px;" id="pomodoroStatus">专注25分钟，休息5分钟</div>
+            </div>
+
+            <!-- 单词学习 -->
+            <div class="word-card">
+                <div class="word-title" id="word">Loading...</div>
+                <div class="word-phonetic" id="phonetic"></div>
+                <div class="word-meaning" id="meaning"></div>
+                <div class="button-group">
+                    <button onclick="toggleMeaning()">显示释义</button>
+                    <button onclick="nextWord()">换一个</button>
+                </div>
+                <div style="margin-top: 15px; color: #666; font-size: 14px;">今日已学：<strong id="todayCount">0</strong> 个</div>
+            </div>
+        </div>
+
+        <!-- 两列布局：待办事项、硬件项目 -->
+        <div class="two-column">
+            <!-- 待办事项 -->
+            <div class="todo-card">
+                <div class="section-title">✅ 待办事项</div>
+                <div class="todo-input-box">
+                    <input type="text" class="todo-input" id="todoInput" placeholder="添加新任务..." onkeypress="if(event.key==='Enter') addTodo()">
+                    <button onclick="addTodo()">➕ 添加</button>
+                </div>
+                <ul class="todo-list" id="todoList"></ul>
+            </div>
+
+            <!-- 硬件项目笔记 -->
+            <div class="hardware-card">
+                <div class="section-title">🔧 硬件项目</div>
+                <div class="project-list" id="projectList"></div>
+                <button onclick="addProject()" style="margin-top: 15px; width: 100%;">➕ 添加项目</button>
+            </div>
+        </div>
+
+        <!-- 网站导航 -->
         <div class="websites-section">
             <div class="section-title">🔖 常用网站</div>
-            <div id="websitesLoading" class="loading" style="display: none;">加载中...</div>
-            <div class="websites-grid" id="websitesGrid">
-                <!-- 网站卡片将通过JavaScript动态生成 -->
-            </div>
-            <button class="add-website-btn" onclick="addWebsite()" id="addWebsiteBtn">➕ 添加新网站</button>
+            <div class="websites-grid" id="websitesGrid"></div>
+            <button onclick="addWebsite()">➕ 添加网站</button>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-        // Firebase配置
         const firebaseConfig = {
             apiKey: "AIzaSyCnmNFbqOXGbz1otkOAozurWGS_YN5XeWE",
             authDomain: "runl-85bf0.firebaseapp.com",
             projectId: "runl-85bf0",
             storageBucket: "runl-85bf0.firebasestorage.app",
             messagingSenderId: "595101013886",
-            appId: "1:595101013886:web:31a62290779239172d452f",
-            measurementId: "G-NMH57P3SRT"
+            appId: "1:595101013886:web:31a62290779239172d452f"
         };
 
-        // 初始化Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -367,8 +515,8 @@
 
         // 六级词汇库
         const cet6Words = [
-            { word: "abandon", phonetic: "/əˈbændən/", meaning: "v. 放弃；抛弃\nn. 放纵" },
-            { word: "abstract", phonetic: "/ˈæbstrækt/", meaning: "adj. 抽象的\nn. 摘要\nv. 提取" },
+            { word: "abandon", phonetic: "/əˈbændən/", meaning: "v. 放弃；抛弃 n. 放纵" },
+            { word: "abstract", phonetic: "/ˈæbstrækt/", meaning: "adj. 抽象的 n. 摘要 v. 提取" },
             { word: "accelerate", phonetic: "/əkˈseləreɪt/", meaning: "v. 加速；促进" },
             { word: "accomplish", phonetic: "/əˈkʌmplɪʃ/", meaning: "v. 完成；实现" },
             { word: "accumulate", phonetic: "/əˈkjuːmjəleɪt/", meaning: "v. 积累；堆积" },
@@ -376,309 +524,272 @@
             { word: "acknowledge", phonetic: "/əkˈnɑːlɪdʒ/", meaning: "v. 承认；答谢" },
             { word: "acquire", phonetic: "/əˈkwaɪər/", meaning: "v. 获得；学到" },
             { word: "adequate", phonetic: "/ˈædɪkwət/", meaning: "adj. 足够的；适当的" },
-            { word: "adjacent", phonetic: "/əˈdʒeɪsnt/", meaning: "adj. 邻近的；毗连的" },
-            { word: "advocate", phonetic: "/ˈædvəkeɪt/", meaning: "v. 提倡；拥护\nn. 提倡者" },
-            { word: "aesthetic", phonetic: "/esˈθetɪk/", meaning: "adj. 美学的；审美的" },
-            { word: "allocate", phonetic: "/ˈæləkeɪt/", meaning: "v. 分配；拨出" },
-            { word: "alternative", phonetic: "/ɔːlˈtɜːrnətɪv/", meaning: "adj. 供选择的\nn. 选择；替代品" },
-            { word: "ambiguous", phonetic: "/æmˈbɪɡjuəs/", meaning: "adj. 模糊的；含糊的" },
-            { word: "anticipate", phonetic: "/ænˈtɪsɪpeɪt/", meaning: "v. 预期；期望" },
-            { word: "apparatus", phonetic: "/ˌæpəˈreɪtəs/", meaning: "n. 器械；装置；仪器" },
-            { word: "arbitrary", phonetic: "/ˈɑːrbɪtreri/", meaning: "adj. 任意的；武断的" },
-            { word: "architecture", phonetic: "/ˈɑːrkɪtektʃər/", meaning: "n. 建筑学；建筑风格" },
-            { word: "artificial", phonetic: "/ˌɑːrtɪˈfɪʃl/", meaning: "adj. 人工的；人造的" },
-            { word: "assemble", phonetic: "/əˈsembl/", meaning: "v. 集合；装配" },
-            { word: "assess", phonetic: "/əˈses/", meaning: "v. 评估；估价" },
-            { word: "attribute", phonetic: "/əˈtrɪbjuːt/", meaning: "v. 归因于\nn. 属性" },
-            { word: "authentic", phonetic: "/ɔːˈθentɪk/", meaning: "adj. 真正的；可信的" },
-            { word: "automatic", phonetic: "/ˌɔːtəˈmætɪk/", meaning: "adj. 自动的；无意识的" },
-            { word: "beneficial", phonetic: "/ˌbenɪˈfɪʃl/", meaning: "adj. 有益的；有利的" },
-            { word: "catastrophe", phonetic: "/kəˈtæstrəfi/", meaning: "n. 大灾难；大祸" },
-            { word: "coherent", phonetic: "/koʊˈhɪrənt/", meaning: "adj. 连贯的；一致的" },
-            { word: "collaborate", phonetic: "/kəˈlæbəreɪt/", meaning: "v. 合作；协作" },
-            { word: "compatible", phonetic: "/kəmˈpætəbl/", meaning: "adj. 兼容的；和谐的" },
-            { word: "compensate", phonetic: "/ˈkɑːmpenseɪt/", meaning: "v. 补偿；赔偿" },
-            { word: "complex", phonetic: "/kəmˈpleks/", meaning: "adj. 复杂的\nn. 综合体" },
-            { word: "comprehensive", phonetic: "/ˌkɑːmprɪˈhensɪv/", meaning: "adj. 全面的；综合的" },
-            { word: "conceive", phonetic: "/kənˈsiːv/", meaning: "v. 构思；怀孕" },
-            { word: "concentrate", phonetic: "/ˈkɑːnsntreɪt/", meaning: "v. 集中；浓缩" },
-            { word: "contemporary", phonetic: "/kənˈtempəreri/", meaning: "adj. 当代的\nn. 同时代的人" },
-            { word: "controversial", phonetic: "/ˌkɑːntrəˈvɜːrʃl/", meaning: "adj. 有争议的" },
-            { word: "conventional", phonetic: "/kənˈvenʃənl/", meaning: "adj. 传统的；常规的" },
-            { word: "deliberate", phonetic: "/dɪˈlɪbərət/", meaning: "adj. 故意的\nv. 仔细考虑" },
-            { word: "demonstrate", phonetic: "/ˈdemənstreɪt/", meaning: "v. 证明；演示" },
-            { word: "deviate", phonetic: "/ˈdiːvieɪt/", meaning: "v. 偏离；违背" },
-            { word: "distinguish", phonetic: "/dɪˈstɪŋɡwɪʃ/", meaning: "v. 区分；辨别" },
-            { word: "dominant", phonetic: "/ˈdɑːmɪnənt/", meaning: "adj. 占优势的；支配的" },
-            { word: "elaborate", phonetic: "/ɪˈlæbərət/", meaning: "adj. 精心制作的\nv. 详细说明" },
-            { word: "eliminate", phonetic: "/ɪˈlɪmɪneɪt/", meaning: "v. 消除；淘汰" },
-            { word: "emphasize", phonetic: "/ˈemfəsaɪz/", meaning: "v. 强调；着重" },
-            { word: "enhance", phonetic: "/ɪnˈhæns/", meaning: "v. 提高；增强" },
-            { word: "equivalent", phonetic: "/ɪˈkwɪvələnt/", meaning: "adj. 相等的\nn. 等价物" },
-            { word: "estimate", phonetic: "/ˈestɪmeɪt/", meaning: "v. 估计；评价\nn. 估计" },
-            { word: "facilitate", phonetic: "/fəˈsɪlɪteɪt/", meaning: "v. 促进；使便利" }
+            { word: "adjacent", phonetic: "/əˈdʒeɪsnt/", meaning: "adj. 邻近的；毗连的" }
         ];
 
-        // 默认网站列表
         const defaultWebsites = [
             { name: "百度", url: "https://www.baidu.com", desc: "搜索引擎" },
             { name: "Google", url: "https://www.google.com", desc: "搜索引擎" },
             { name: "GitHub", url: "https://github.com", desc: "代码托管" },
-            { name: "B站", url: "https://www.bilibili.com", desc: "视频网站" },
-            { name: "知乎", url: "https://www.zhihu.com", desc: "问答社区" },
-            { name: "淘宝", url: "https://www.taobao.com", desc: "购物网站" },
-            { name: "YouTube", url: "https://www.youtube.com", desc: "视频平台" },
-            { name: "ChatGPT", url: "https://chat.openai.com", desc: "AI助手" }
+            { name: "B站", url: "https://www.bilibili.com", desc: "视频网站" }
         ];
 
-        // 全局变量
         let currentUser = null;
-        let currentWordIndex = 0;
-        let todayCount = 0;
-        let viewedWords = new Set();
-        let websites = [...defaultWebsites];
-        let unsubscribeSnapshot = null;
+        let userData = {
+            websites: [...defaultWebsites],
+            todos: [],
+            projects: [],
+            examDate: null,
+            todayCount: 0,
+            viewedWords: []
+        };
 
-        // 监听用户登录状态
+        let pomodoroInterval = null;
+        let pomodoroSeconds = 25 * 60;
+        let pomodoroRunning = false;
+
+        // 登录相关
         onAuthStateChanged(auth, (user) => {
+            currentUser = user;
             if (user) {
-                currentUser = user;
-                showUserInfo(user);
+                document.getElementById('userInfo').innerHTML = `
+                    <img src="${user.photoURL}" class="user-avatar">
+                    <div><div class="user-name">${user.displayName}</div></div>
+                `;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-block';
                 loadUserData(user.uid);
             } else {
-                currentUser = null;
-                showLoginPrompt();
+                document.getElementById('userInfo').innerHTML = '<div class="login-prompt">🔐 请先登录以同步数据</div>';
+                document.getElementById('loginBtn').style.display = 'inline-block';
+                document.getElementById('logoutBtn').style.display = 'none';
                 loadLocalData();
             }
         });
 
-        // 显示用户信息
-        function showUserInfo(user) {
-            const userInfoDiv = document.getElementById('userInfo');
-            userInfoDiv.innerHTML = `
-                <img src="${user.photoURL || 'https://via.placeholder.com/40'}" class="user-avatar" alt="头像">
-                <div>
-                    <div class="user-name">${user.displayName || '用户'}</div>
-                    <div style="font-size: 12px; color: #888;">${user.email}</div>
-                </div>
-            `;
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            document.getElementById('syncStatus').style.display = 'inline-flex';
-        }
-
-        // 显示登录提示
-        function showLoginPrompt() {
-            const userInfoDiv = document.getElementById('userInfo');
-            userInfoDiv.innerHTML = '<div class="login-prompt">🔐 请先登录以同步数据</div>';
-            document.getElementById('loginBtn').style.display = 'inline-block';
-            document.getElementById('logoutBtn').style.display = 'none';
-            document.getElementById('syncStatus').style.display = 'none';
-        }
-
-        // 登录
-        window.login = async function() {
+        window.login = async () => {
             try {
-                const result = await signInWithPopup(auth, provider);
-                console.log('登录成功:', result.user.displayName);
+                await signInWithPopup(auth, provider);
             } catch (error) {
-                console.error('登录失败:', error);
                 alert('登录失败: ' + error.message);
             }
         };
 
-        // 登出
-        window.logout = async function() {
-            try {
-                if (unsubscribeSnapshot) {
-                    unsubscribeSnapshot();
+        window.logout = async () => {
+            await signOut(auth);
+            userData = { websites: [...defaultWebsites], todos: [], projects: [], examDate: null, todayCount: 0, viewedWords: [] };
+            renderAll();
+        };
+
+        function loadUserData(uid) {
+            const docRef = doc(db, 'users', uid);
+            onSnapshot(docRef, (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    userData = { ...userData, ...data };
+                    if (!userData.websites) userData.websites = [...defaultWebsites];
+                    if (!userData.todos) userData.todos = [];
+                    if (!userData.projects) userData.projects = [];
                 }
-                await signOut(auth);
-                websites = [...defaultWebsites];
-                renderWebsites();
-            } catch (error) {
-                console.error('登出失败:', error);
-                alert('登出失败: ' + error.message);
-            }
-        };
-
-        // 从云端加载用户数据
-        async function loadUserData(uid) {
-            try {
-                const userDocRef = doc(db, 'users', uid);
-
-                // 实时监听数据变化
-                unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-
-                        // 检查日期
-                        const lastDate = data.lastDate;
-                        const today = new Date().toDateString();
-
-                        if (lastDate === today) {
-                            todayCount = data.todayCount || 0;
-                            viewedWords = new Set(data.viewedWords || []);
-                        } else {
-                            todayCount = 0;
-                            viewedWords.clear();
-                        }
-
-                        // 加载网站列表
-                        if (data.websites && data.websites.length > 0) {
-                            websites = data.websites;
-                        } else {
-                            websites = [...defaultWebsites];
-                        }
-
-                        document.getElementById('todayCount').textContent = todayCount;
-                        renderWebsites();
-                    } else {
-                        // 首次登录，使用默认数据
-                        websites = [...defaultWebsites];
-                        renderWebsites();
-                    }
-                });
-            } catch (error) {
-                console.error('加载数据失败:', error);
-            }
-        }
-
-        // 保存数据到云端
-        async function saveUserData() {
-            if (!currentUser) {
-                // 未登录，保存到本地
-                saveLocalData();
-                return;
-            }
-
-            try {
-                const userDocRef = doc(db, 'users', currentUser.uid);
-                await setDoc(userDocRef, {
-                    todayCount: todayCount,
-                    viewedWords: Array.from(viewedWords),
-                    lastDate: new Date().toDateString(),
-                    websites: websites,
-                    updatedAt: new Date().toISOString()
-                });
-            } catch (error) {
-                console.error('保存数据失败:', error);
-            }
-        }
-
-        // 从本地存储加载数据（未登录时使用）
-        function loadLocalData() {
-            const saved = localStorage.getItem('homepageData');
-            if (saved) {
-                const data = JSON.parse(saved);
-                todayCount = data.todayCount || 0;
-                viewedWords = new Set(data.viewedWords || []);
-
-                const lastDate = data.lastDate;
-                const today = new Date().toDateString();
-                if (lastDate !== today) {
-                    todayCount = 0;
-                    viewedWords.clear();
-                }
-            }
-
-            const savedWebsites = localStorage.getItem('websites');
-            if (savedWebsites) {
-                websites = JSON.parse(savedWebsites);
-            }
-
-            document.getElementById('todayCount').textContent = todayCount;
-            renderWebsites();
-        }
-
-        // 保存到本地存储（未登录时使用）
-        function saveLocalData() {
-            const data = {
-                todayCount: todayCount,
-                viewedWords: Array.from(viewedWords),
-                lastDate: new Date().toDateString()
-            };
-            localStorage.setItem('homepageData', JSON.stringify(data));
-            localStorage.setItem('websites', JSON.stringify(websites));
-        }
-
-        // 显示单词
-        function showWord(index) {
-            const wordData = cet6Words[index];
-            document.getElementById('word').textContent = wordData.word;
-            document.getElementById('phonetic').textContent = wordData.phonetic;
-            document.getElementById('meaning').textContent = wordData.meaning;
-            document.getElementById('meaning').classList.remove('show');
-
-            if (!viewedWords.has(index)) {
-                viewedWords.add(index);
-                todayCount++;
-                document.getElementById('todayCount').textContent = todayCount;
-                saveUserData();
-            }
-        }
-
-        // 切换释义显示
-        window.toggleMeaning = function() {
-            document.getElementById('meaning').classList.toggle('show');
-        };
-
-        // 下一个单词
-        window.nextWord = function() {
-            currentWordIndex = Math.floor(Math.random() * cet6Words.length);
-            showWord(currentWordIndex);
-        };
-
-        // 渲染网站列表
-        function renderWebsites() {
-            const grid = document.getElementById('websitesGrid');
-            grid.innerHTML = '';
-
-            websites.forEach((site, index) => {
-                const card = document.createElement('div');
-                card.style.position = 'relative';
-                card.innerHTML = `
-                    <a href="${site.url}" target="_blank" class="website-card">
-                        <div class="website-name">${site.name}</div>
-                        <div class="website-desc">${site.desc}</div>
-                        <button class="delete-site-btn" onclick="deleteWebsite(${index}); event.preventDefault();" title="删除">×</button>
-                    </a>
-                `;
-                grid.appendChild(card);
+                renderAll();
+                updateCountdown();
             });
         }
 
-        // 添加新网站
-        window.addWebsite = function() {
-            const name = prompt('输入网站名称：');
+        function saveUserData() {
+            if (!currentUser) {
+                localStorage.setItem('userData', JSON.stringify(userData));
+                return;
+            }
+            const docRef = doc(db, 'users', currentUser.uid);
+            setDoc(docRef, { ...userData, updatedAt: new Date().toISOString() });
+        }
+
+        function loadLocalData() {
+            const saved = localStorage.getItem('userData');
+            if (saved) {
+                userData = JSON.parse(saved);
+            }
+            renderAll();
+            updateCountdown();
+        }
+
+        // 快速搜索
+        window.quickSearch = () => {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        };
+
+        // 倒计时
+        window.setExamDate = () => {
+            const dateStr = prompt('输入六级考试日期（格式：2026-12-15）：');
+            if (dateStr) {
+                userData.examDate = dateStr;
+                saveUserData();
+                updateCountdown();
+            }
+        };
+
+        function updateCountdown() {
+            if (!userData.examDate) {
+                document.getElementById('countdownDays').textContent = '未设置';
+                return;
+            }
+            const today = new Date();
+            const exam = new Date(userData.examDate);
+            const diff = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('countdownDays').textContent = diff > 0 ? diff : '已过期';
+        }
+
+        // 番茄钟
+        window.startPomodoro = () => {
+            if (pomodoroRunning) return;
+            pomodoroRunning = true;
+            pomodoroInterval = setInterval(() => {
+                pomodoroSeconds--;
+                if (pomodoroSeconds <= 0) {
+                    alert('⏰ 时间到！休息一下吧！');
+                    resetPomodoro();
+                }
+                updatePomodoroDisplay();
+            }, 1000);
+        };
+
+        window.pausePomodoro = () => {
+            pomodoroRunning = false;
+            clearInterval(pomodoroInterval);
+        };
+
+        window.resetPomodoro = () => {
+            pomodoroRunning = false;
+            clearInterval(pomodoroInterval);
+            pomodoroSeconds = 25 * 60;
+            updatePomodoroDisplay();
+        };
+
+        function updatePomodoroDisplay() {
+            const mins = Math.floor(pomodoroSeconds / 60);
+            const secs = pomodoroSeconds % 60;
+            document.getElementById('pomodoroTimer').textContent =
+                `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // 单词学习
+        window.nextWord = () => {
+            const word = cet6Words[Math.floor(Math.random() * cet6Words.length)];
+            document.getElementById('word').textContent = word.word;
+            document.getElementById('phonetic').textContent = word.phonetic;
+            document.getElementById('meaning').textContent = word.meaning;
+            document.getElementById('meaning').classList.remove('show');
+            userData.todayCount++;
+            document.getElementById('todayCount').textContent = userData.todayCount;
+            saveUserData();
+        };
+
+        window.toggleMeaning = () => {
+            document.getElementById('meaning').classList.toggle('show');
+        };
+
+        // 待办事项
+        window.addTodo = () => {
+            const text = document.getElementById('todoInput').value.trim();
+            if (!text) return;
+            userData.todos.push({ text, completed: false, id: Date.now() });
+            document.getElementById('todoInput').value = '';
+            saveUserData();
+            renderTodos();
+        };
+
+        window.toggleTodo = (id) => {
+            const todo = userData.todos.find(t => t.id === id);
+            if (todo) todo.completed = !todo.completed;
+            saveUserData();
+            renderTodos();
+        };
+
+        window.deleteTodo = (id) => {
+            userData.todos = userData.todos.filter(t => t.id !== id);
+            saveUserData();
+            renderTodos();
+        };
+
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            list.innerHTML = userData.todos.map(todo => `
+                <li class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.id})">
+                    <span class="todo-text">${todo.text}</span>
+                    <button class="todo-delete" onclick="deleteTodo(${todo.id})">删除</button>
+                </li>
+            `).join('');
+        }
+
+        // 硬件项目
+        window.addProject = () => {
+            const name = prompt('项目名称：');
             if (!name) return;
+            const desc = prompt('项目描述：') || '';
+            const status = prompt('状态（进行中/已完成/计划中）：') || '进行中';
+            userData.projects.push({ name, desc, status, id: Date.now() });
+            saveUserData();
+            renderProjects();
+        };
 
-            const url = prompt('输入网站地址（例如：https://www.example.com）：');
+        window.deleteProject = (id) => {
+            if (confirm('确定删除这个项目吗？')) {
+                userData.projects = userData.projects.filter(p => p.id !== id);
+                saveUserData();
+                renderProjects();
+            }
+        };
+
+        function renderProjects() {
+            const list = document.getElementById('projectList');
+            list.innerHTML = userData.projects.map(proj => `
+                <div class="project-item">
+                    <div class="project-name">${proj.name}</div>
+                    <div class="project-desc">${proj.desc}</div>
+                    <span class="project-status">${proj.status}</span>
+                    <button onclick="deleteProject(${proj.id})" style="float: right; font-size: 12px; padding: 5px 10px; background: #ef4444;">删除</button>
+                </div>
+            `).join('');
+        }
+
+        // 网站导航
+        window.addWebsite = () => {
+            const name = prompt('网站名称：');
+            if (!name) return;
+            const url = prompt('网站地址：');
             if (!url) return;
-
-            const desc = prompt('输入网站描述（可选）：') || '';
-
-            websites.push({ name, url, desc });
+            const desc = prompt('描述：') || '';
+            userData.websites.push({ name, url, desc });
             saveUserData();
             renderWebsites();
         };
 
-        // 删除网站
-        window.deleteWebsite = function(index) {
-            if (confirm('确定要删除这个网站吗？')) {
-                websites.splice(index, 1);
-                saveUserData();
-                renderWebsites();
-            }
-        };
+        function renderWebsites() {
+            const grid = document.getElementById('websitesGrid');
+            grid.innerHTML = userData.websites.map(site => `
+                <a href="${site.url}" target="_blank" class="website-card">
+                    <div class="website-name">${site.name}</div>
+                    <div class="website-desc">${site.desc}</div>
+                </a>
+            `).join('');
+        }
 
-        // 初始化
-        function init() {
+        function renderAll() {
+            renderTodos();
+            renderProjects();
+            renderWebsites();
+            document.getElementById('todayCount').textContent = userData.todayCount || 0;
             nextWord();
         }
 
-        // 页面加载完成后初始化
-        window.addEventListener('DOMContentLoaded', init);
+        // 初始化
+        renderAll();
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
     </script>
 </body>
-</html> 
+</html>
