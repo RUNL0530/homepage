@@ -3,501 +3,609 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页 - 完整版</title>
+    <title>我的个人主页</title>
     <style>
+        :root {
+            --bg: #f4f7fb;
+            --panel: #ffffff;
+            --text: #172033;
+            --muted: #667085;
+            --line: #d9e0ea;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --teal: #0f9f8f;
+            --green: #16a34a;
+            --amber: #d97706;
+            --red: #dc2626;
+            --shadow: 0 16px 42px rgba(29, 41, 57, 0.12);
+            --radius: 8px;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            background:
+                radial-gradient(circle at top left, rgba(15, 159, 143, 0.14), transparent 28rem),
+                linear-gradient(135deg, #f4f7fb 0%, #eef3f8 55%, #f7f4ee 100%);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
         }
 
         .container {
-            max-width: 1400px;
+            width: min(1400px, 100%);
             margin: 0 auto;
         }
 
-        /* 顶部工具栏 */
+        .top-bar,
+        .tool-card,
+        .data-card,
+        .websites-section {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(217, 224, 234, 0.78);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
         .top-bar {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 18px;
+            margin-bottom: 18px;
         }
 
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
         }
 
-        .search-input {
-            flex: 1;
-            padding: 12px 20px;
-            border: 2px solid #667eea;
-            border-radius: 25px;
-            font-size: 16px;
+        .search-input,
+        .todo-input {
+            width: 100%;
+            min-width: 0;
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: #fff;
+            color: var(--text);
             outline: none;
         }
 
-        .search-input:focus {
-            border-color: #764ba2;
+        .search-input:focus,
+        .todo-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
-        .search-btn {
-            padding: 12px 30px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* 用户栏 */
         .user-bar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 16px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            min-width: 0;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 auto;
+            border: 2px solid rgba(37, 99, 235, 0.35);
             border-radius: 50%;
-            border: 2px solid #667eea;
+            object-fit: cover;
         }
 
         .user-name {
-            font-weight: bold;
-            color: #333;
+            font-weight: 700;
         }
 
-        .login-prompt {
-            color: #666;
+        .user-email,
+        .login-prompt,
+        .sync-status,
+        .card-note,
+        .empty-state {
+            color: var(--muted);
+            font-size: 13px;
         }
 
-        button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 25px;
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .sync-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            background: var(--primary);
+            color: #fff;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            font-weight: 700;
+            line-height: 1.2;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            white-space: nowrap;
         }
 
-        button:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.24);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-small {
+            min-height: 32px;
+            padding: 7px 10px;
+            font-size: 13px;
+        }
+
+        .btn-secondary {
+            background: #475467;
+        }
+
+        .btn-secondary:hover {
+            background: #344054;
+            box-shadow: 0 8px 18px rgba(52, 64, 84, 0.2);
+        }
+
+        .btn-success {
+            background: var(--green);
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+            box-shadow: 0 8px 18px rgba(22, 163, 74, 0.2);
+        }
+
+        .btn-warning {
+            background: var(--amber);
+        }
+
+        .btn-warning:hover {
+            background: #b45309;
+            box-shadow: 0 8px 18px rgba(217, 119, 6, 0.2);
+        }
+
+        .btn-danger {
+            background: var(--red);
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            box-shadow: 0 8px 18px rgba(220, 38, 38, 0.2);
         }
 
         .btn-login {
-            background: #4285f4;
+            background: #1a73e8;
         }
 
         .btn-logout {
-            background: #ef4444;
-            padding: 8px 20px;
-            font-size: 14px;
+            background: var(--red);
         }
 
-        /* 倒计时卡片 */
-        .countdown-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        .grid-three {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .grid-two {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .tool-card,
+        .data-card,
+        .websites-section {
+            padding: 22px;
+        }
+
+        .card-title,
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--line);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .countdown-display,
+        .pomodoro-timer,
+        .word-title {
+            color: var(--primary);
+            font-weight: 800;
             text-align: center;
         }
 
-        .countdown-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-
         .countdown-display {
+            min-height: 64px;
             font-size: 48px;
-            font-weight: bold;
-            color: #764ba2;
+            line-height: 1.1;
         }
 
         .countdown-unit {
-            font-size: 18px;
-            color: #666;
-        }
-
-        /* 番茄钟 */
-        .pomodoro-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin: 8px 0 16px;
+            color: var(--muted);
             text-align: center;
         }
 
         .pomodoro-timer {
-            font-size: 64px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
+            margin: 12px 0 16px;
+            font-variant-numeric: tabular-nums;
+            font-size: 58px;
+            line-height: 1.1;
         }
 
-        .pomodoro-controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-success {
-            background: #10b981;
-        }
-
-        .btn-warning {
-            background: #f59e0b;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-        }
-
-        /* 待办事项 */
-        .todo-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
+        .button-row,
+        .pomodoro-controls,
         .todo-input-box {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 20px;
         }
 
-        .todo-input {
-            flex: 1;
-            padding: 12px 20px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        .todo-list {
-            list-style: none;
-        }
-
-        .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .todo-item.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-
-        .todo-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .todo-text {
-            flex: 1;
-        }
-
-        .todo-delete {
-            background: #ef4444;
-            padding: 5px 15px;
-            font-size: 14px;
-        }
-
-        /* 硬件项目笔记 */
-        .hardware-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .project-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .project-item {
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-
-        .project-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .project-desc {
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .project-status {
-            display: inline-block;
-            padding: 5px 15px;
-            background: #667eea;
-            color: white;
-            border-radius: 15px;
-            font-size: 12px;
-        }
-
-        /* 单词卡片 */
-        .word-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
+        .button-row,
+        .pomodoro-controls {
+            justify-content: center;
         }
 
         .word-title {
-            font-size: 48px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 20px;
+            min-height: 58px;
+            margin-bottom: 8px;
+            font-size: 44px;
+            line-height: 1.1;
+            overflow-wrap: anywhere;
         }
 
         .word-phonetic {
-            font-size: 20px;
-            color: #888;
-            margin-bottom: 15px;
+            min-height: 26px;
+            margin-bottom: 10px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 18px;
         }
 
         .word-meaning {
-            font-size: 18px;
-            color: #555;
-            line-height: 1.6;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
             display: none;
-            margin-bottom: 20px;
+            min-height: 54px;
+            margin-bottom: 14px;
+            padding: 12px;
+            border-radius: var(--radius);
+            background: #f3f6fa;
+            color: #344054;
+            line-height: 1.55;
+            white-space: pre-line;
         }
 
         .word-meaning.show {
             display: block;
         }
 
-        .button-group {
+        .stats {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .todo-input-box {
+            margin-bottom: 14px;
+        }
+
+        .todo-input-box .todo-input {
+            flex: 1 1 220px;
+        }
+
+        .todo-list,
+        .project-list {
+            display: grid;
+            gap: 10px;
+            list-style: none;
+        }
+
+        .todo-item,
+        .project-item {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: #fbfcfe;
         }
 
-        /* 网站导航 */
-        .websites-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        .todo-checkbox {
+            width: 19px;
+            height: 19px;
+            flex: 0 0 auto;
+            cursor: pointer;
         }
 
-        .section-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+        .todo-text {
+            flex: 1;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .todo-item.completed .todo-text {
+            color: var(--muted);
+            text-decoration: line-through;
+        }
+
+        .project-item {
+            align-items: flex-start;
+            border-left: 4px solid var(--teal);
+        }
+
+        .project-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .project-name {
+            margin-bottom: 6px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .project-desc {
+            margin-bottom: 8px;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .project-status {
+            display: inline-flex;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: rgba(15, 159, 143, 0.12);
+            color: #0f766e;
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .websites-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .website-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 100px;
             position: relative;
+            min-height: 104px;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, #2563eb 0%, #0f9f8f 100%);
+            color: #fff;
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
         }
 
         .website-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24);
+            transform: translateY(-2px);
+        }
+
+        .website-link {
+            display: flex;
+            min-height: 104px;
+            padding: 18px 34px 18px 18px;
+            color: inherit;
+            text-align: center;
+            text-decoration: none;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .website-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 17px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
         }
 
         .website-desc {
-            font-size: 12px;
             opacity: 0.9;
+            font-size: 12px;
+            overflow-wrap: anywhere;
         }
 
-        /* 两列布局 */
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .delete-site-btn {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 26px;
+            height: 26px;
+            min-height: 26px;
+            padding: 0;
+            border-radius: 50%;
+            background: rgba(17, 24, 39, 0.45);
+            color: #fff;
+            font-size: 18px;
+            line-height: 1;
         }
 
-        .three-column {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .empty-state {
+            padding: 12px;
+            border: 1px dashed var(--line);
+            border-radius: var(--radius);
+            background: #fbfcfe;
         }
 
-        @media (max-width: 1200px) {
-            .three-column {
+        @media (max-width: 1100px) {
+            .grid-three {
                 grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 768px) {
-            .two-column {
+        @media (max-width: 760px) {
+            body {
+                padding: 12px;
+            }
+
+            .grid-two {
                 grid-template-columns: 1fr;
+            }
+
+            .search-box,
+            .user-bar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .word-title,
+            .countdown-display {
+                font-size: 36px;
+            }
+
+            .pomodoro-timer {
+                font-size: 44px;
+            }
+
+            .websites-grid {
+                grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 顶部工具栏 -->
-        <div class="top-bar">
-            <!-- 搜索框 -->
+    <main class="container">
+        <section class="top-bar">
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="快速搜索 Google / 百度 / GitHub..." onkeypress="if(event.key==='Enter') quickSearch()">
-                <button class="search-btn" onclick="quickSearch()">🔍 搜索</button>
+                <input class="search-input" id="searchInput" type="text" placeholder="快速搜索 Google / 百度 / GitHub..." autocomplete="off">
+                <button class="btn" id="searchBtn" type="button">搜索</button>
             </div>
-
-            <!-- 用户栏 -->
             <div class="user-bar">
                 <div id="userInfo" class="user-info">
-                    <div class="login-prompt">🔐 请先登录以同步数据</div>
+                    <div class="login-prompt">请先登录以同步数据</div>
                 </div>
-                <div>
-                    <button id="loginBtn" class="btn-login" onclick="login()">🚀 Google登录</button>
-                    <button id="logoutBtn" class="btn-logout" onclick="logout()" style="display: none;">退出登录</button>
+                <div class="button-row">
+                    <button class="btn btn-login" id="loginBtn" type="button">Google 登录</button>
+                    <button class="btn btn-logout" id="logoutBtn" type="button" style="display: none;">退出登录</button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 三列布局：倒计时、番茄钟、单词 -->
-        <div class="three-column">
-            <!-- 倒计时 -->
-            <div class="countdown-card">
-                <div class="countdown-title">📅 距离六级考试</div>
+        <section class="grid-three">
+            <article class="tool-card">
+                <div class="card-title">距离六级考试</div>
                 <div class="countdown-display" id="countdownDays">-</div>
-                <div class="countdown-unit">天</div>
-                <button onclick="setExamDate()" style="margin-top: 15px; font-size: 14px; padding: 8px 20px;">设置日期</button>
-            </div>
+                <div class="countdown-unit" id="countdownUnit">天</div>
+                <div class="button-row">
+                    <button class="btn btn-secondary" id="setExamDateBtn" type="button">设置日期</button>
+                </div>
+            </article>
 
-            <!-- 番茄钟 -->
-            <div class="pomodoro-card">
-                <div class="countdown-title">🍅 番茄钟</div>
+            <article class="tool-card">
+                <div class="card-title">番茄钟</div>
                 <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
                 <div class="pomodoro-controls">
-                    <button class="btn-success" onclick="startPomodoro()">开始</button>
-                    <button class="btn-warning" onclick="pausePomodoro()">暂停</button>
-                    <button class="btn-danger" onclick="resetPomodoro()">重置</button>
+                    <button class="btn btn-success" id="startPomodoroBtn" type="button">开始</button>
+                    <button class="btn btn-warning" id="pausePomodoroBtn" type="button">暂停</button>
+                    <button class="btn btn-danger" id="resetPomodoroBtn" type="button">重置</button>
                 </div>
-                <div style="margin-top: 15px; color: #666; font-size: 14px;" id="pomodoroStatus">专注25分钟，休息5分钟</div>
-            </div>
+                <p class="card-note" id="pomodoroStatus">专注 25 分钟，休息 5 分钟</p>
+            </article>
 
-            <!-- 单词学习 -->
-            <div class="word-card">
+            <article class="tool-card">
+                <div class="card-title">六级单词</div>
                 <div class="word-title" id="word">Loading...</div>
                 <div class="word-phonetic" id="phonetic"></div>
                 <div class="word-meaning" id="meaning"></div>
-                <div class="button-group">
-                    <button onclick="toggleMeaning()">显示释义</button>
-                    <button onclick="nextWord()">换一个</button>
+                <div class="button-row">
+                    <button class="btn btn-secondary" id="toggleMeaningBtn" type="button">显示释义</button>
+                    <button class="btn" id="nextWordBtn" type="button">换一个</button>
                 </div>
-                <div style="margin-top: 15px; color: #666; font-size: 14px;">今日已学：<strong id="todayCount">0</strong> 个</div>
-            </div>
-        </div>
+                <div class="stats">
+                    今日已学：<strong id="todayCount">0</strong> 个
+                    <span id="syncStatus" class="sync-status" style="display: none;">
+                        <span class="sync-indicator"></span>
+                        <span id="syncStatusText">已同步到云端</span>
+                    </span>
+                </div>
+            </article>
+        </section>
 
-        <!-- 两列布局：待办事项、硬件项目 -->
-        <div class="two-column">
-            <!-- 待办事项 -->
-            <div class="todo-card">
-                <div class="section-title">✅ 待办事项</div>
+        <section class="grid-two">
+            <article class="data-card">
+                <div class="section-title">待办事项</div>
                 <div class="todo-input-box">
-                    <input type="text" class="todo-input" id="todoInput" placeholder="添加新任务..." onkeypress="if(event.key==='Enter') addTodo()">
-                    <button onclick="addTodo()">➕ 添加</button>
+                    <input class="todo-input" id="todoInput" type="text" placeholder="添加新任务..." autocomplete="off">
+                    <button class="btn" id="addTodoBtn" type="button">添加</button>
                 </div>
                 <ul class="todo-list" id="todoList"></ul>
-            </div>
+            </article>
 
-            <!-- 硬件项目笔记 -->
-            <div class="hardware-card">
-                <div class="section-title">🔧 硬件项目</div>
+            <article class="data-card">
+                <div class="section-title">硬件项目</div>
                 <div class="project-list" id="projectList"></div>
-                <button onclick="addProject()" style="margin-top: 15px; width: 100%;">➕ 添加项目</button>
-            </div>
-        </div>
+                <div class="button-row" style="margin-top: 14px;">
+                    <button class="btn" id="addProjectBtn" type="button">添加项目</button>
+                </div>
+            </article>
+        </section>
 
-        <!-- 网站导航 -->
-        <div class="websites-section">
-            <div class="section-title">🔖 常用网站</div>
+        <section class="websites-section">
+            <div class="section-title">常用网站</div>
             <div class="websites-grid" id="websitesGrid"></div>
-            <button onclick="addWebsite()">➕ 添加网站</button>
-        </div>
-    </div>
+            <button class="btn btn-success" id="addWebsiteBtn" type="button">添加网站</button>
+        </section>
+    </main>
 
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getFirestore, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCnmNFbqOXGbz1otkOAozurWGS_YN5XeWE",
@@ -505,7 +613,8 @@
             projectId: "runl-85bf0",
             storageBucket: "runl-85bf0.firebasestorage.app",
             messagingSenderId: "595101013886",
-            appId: "1:595101013886:web:31a62290779239172d452f"
+            appId: "1:595101013886:web:31a62290779239172d452f",
+            measurementId: "G-NMH57P3SRT"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -513,10 +622,13 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // 六级词汇库
+        const STORAGE_KEY = "homepageUserData";
+        const LEGACY_STATS_KEY = "homepageData";
+        const LEGACY_WEBSITES_KEY = "websites";
+
         const cet6Words = [
-            { word: "abandon", phonetic: "/əˈbændən/", meaning: "v. 放弃；抛弃 n. 放纵" },
-            { word: "abstract", phonetic: "/ˈæbstrækt/", meaning: "adj. 抽象的 n. 摘要 v. 提取" },
+            { word: "abandon", phonetic: "/əˈbændən/", meaning: "v. 放弃；抛弃\nn. 放纵" },
+            { word: "abstract", phonetic: "/ˈæbstrækt/", meaning: "adj. 抽象的\nn. 摘要\nv. 提取" },
             { word: "accelerate", phonetic: "/əkˈseləreɪt/", meaning: "v. 加速；促进" },
             { word: "accomplish", phonetic: "/əˈkʌmplɪʃ/", meaning: "v. 完成；实现" },
             { word: "accumulate", phonetic: "/əˈkjuːmjəleɪt/", meaning: "v. 积累；堆积" },
@@ -524,272 +636,747 @@
             { word: "acknowledge", phonetic: "/əkˈnɑːlɪdʒ/", meaning: "v. 承认；答谢" },
             { word: "acquire", phonetic: "/əˈkwaɪər/", meaning: "v. 获得；学到" },
             { word: "adequate", phonetic: "/ˈædɪkwət/", meaning: "adj. 足够的；适当的" },
-            { word: "adjacent", phonetic: "/əˈdʒeɪsnt/", meaning: "adj. 邻近的；毗连的" }
+            { word: "adjacent", phonetic: "/əˈdʒeɪsnt/", meaning: "adj. 邻近的；毗连的" },
+            { word: "advocate", phonetic: "/ˈædvəkeɪt/", meaning: "v. 提倡；拥护\nn. 提倡者" },
+            { word: "aesthetic", phonetic: "/esˈθetɪk/", meaning: "adj. 美学的；审美的" },
+            { word: "allocate", phonetic: "/ˈæləkeɪt/", meaning: "v. 分配；拨出" },
+            { word: "alternative", phonetic: "/ɔːlˈtɜːrnətɪv/", meaning: "adj. 供选择的\nn. 选择；替代品" },
+            { word: "ambiguous", phonetic: "/æmˈbɪɡjuəs/", meaning: "adj. 模糊的；含糊的" },
+            { word: "anticipate", phonetic: "/ænˈtɪsɪpeɪt/", meaning: "v. 预期；期望" },
+            { word: "apparatus", phonetic: "/ˌæpəˈreɪtəs/", meaning: "n. 器械；装置；仪器" },
+            { word: "arbitrary", phonetic: "/ˈɑːrbɪtreri/", meaning: "adj. 任意的；武断的" },
+            { word: "architecture", phonetic: "/ˈɑːrkɪtektʃər/", meaning: "n. 建筑学；建筑风格" },
+            { word: "artificial", phonetic: "/ˌɑːrtɪˈfɪʃl/", meaning: "adj. 人工的；人造的" },
+            { word: "assemble", phonetic: "/əˈsembl/", meaning: "v. 集合；装配" },
+            { word: "assess", phonetic: "/əˈses/", meaning: "v. 评估；估价" },
+            { word: "attribute", phonetic: "/əˈtrɪbjuːt/", meaning: "v. 归因于\nn. 属性" },
+            { word: "authentic", phonetic: "/ɔːˈθentɪk/", meaning: "adj. 真正的；可信的" },
+            { word: "automatic", phonetic: "/ˌɔːtəˈmætɪk/", meaning: "adj. 自动的；无意识的" },
+            { word: "beneficial", phonetic: "/ˌbenɪˈfɪʃl/", meaning: "adj. 有益的；有利的" },
+            { word: "catastrophe", phonetic: "/kəˈtæstrəfi/", meaning: "n. 大灾难；大祸" },
+            { word: "coherent", phonetic: "/koʊˈhɪrənt/", meaning: "adj. 连贯的；一致的" },
+            { word: "collaborate", phonetic: "/kəˈlæbəreɪt/", meaning: "v. 合作；协作" },
+            { word: "compatible", phonetic: "/kəmˈpætəbl/", meaning: "adj. 兼容的；和谐的" },
+            { word: "compensate", phonetic: "/ˈkɑːmpenseɪt/", meaning: "v. 补偿；赔偿" },
+            { word: "complex", phonetic: "/kəmˈpleks/", meaning: "adj. 复杂的\nn. 综合体" },
+            { word: "comprehensive", phonetic: "/ˌkɑːmprɪˈhensɪv/", meaning: "adj. 全面的；综合的" },
+            { word: "conceive", phonetic: "/kənˈsiːv/", meaning: "v. 构思；怀孕" },
+            { word: "concentrate", phonetic: "/ˈkɑːnsntreɪt/", meaning: "v. 集中；浓缩" },
+            { word: "contemporary", phonetic: "/kənˈtempəreri/", meaning: "adj. 当代的\nn. 同时代的人" },
+            { word: "controversial", phonetic: "/ˌkɑːntrəˈvɜːrʃl/", meaning: "adj. 有争议的" },
+            { word: "conventional", phonetic: "/kənˈvenʃənl/", meaning: "adj. 传统的；常规的" },
+            { word: "deliberate", phonetic: "/dɪˈlɪbərət/", meaning: "adj. 故意的\nv. 仔细考虑" },
+            { word: "demonstrate", phonetic: "/ˈdemənstreɪt/", meaning: "v. 证明；演示" },
+            { word: "deviate", phonetic: "/ˈdiːvieɪt/", meaning: "v. 偏离；违背" },
+            { word: "distinguish", phonetic: "/dɪˈstɪŋɡwɪʃ/", meaning: "v. 区分；辨别" },
+            { word: "dominant", phonetic: "/ˈdɑːmɪnənt/", meaning: "adj. 占优势的；支配的" },
+            { word: "elaborate", phonetic: "/ɪˈlæbərət/", meaning: "adj. 精心制作的\nv. 详细说明" },
+            { word: "eliminate", phonetic: "/ɪˈlɪmɪneɪt/", meaning: "v. 消除；淘汰" },
+            { word: "emphasize", phonetic: "/ˈemfəsaɪz/", meaning: "v. 强调；着重" },
+            { word: "enhance", phonetic: "/ɪnˈhæns/", meaning: "v. 提高；增强" },
+            { word: "equivalent", phonetic: "/ɪˈkwɪvələnt/", meaning: "adj. 相等的\nn. 等价物" },
+            { word: "estimate", phonetic: "/ˈestɪmeɪt/", meaning: "v. 估计；评价\nn. 估计" },
+            { word: "facilitate", phonetic: "/fəˈsɪlɪteɪt/", meaning: "v. 促进；使便利" }
         ];
 
         const defaultWebsites = [
             { name: "百度", url: "https://www.baidu.com", desc: "搜索引擎" },
             { name: "Google", url: "https://www.google.com", desc: "搜索引擎" },
             { name: "GitHub", url: "https://github.com", desc: "代码托管" },
-            { name: "B站", url: "https://www.bilibili.com", desc: "视频网站" }
+            { name: "B站", url: "https://www.bilibili.com", desc: "视频网站" },
+            { name: "知乎", url: "https://www.zhihu.com", desc: "问答社区" },
+            { name: "淘宝", url: "https://www.taobao.com", desc: "购物网站" },
+            { name: "YouTube", url: "https://www.youtube.com", desc: "视频平台" },
+            { name: "ChatGPT", url: "https://chat.openai.com", desc: "AI 助手" }
         ];
 
-        let currentUser = null;
-        let userData = {
-            websites: [...defaultWebsites],
-            todos: [],
-            projects: [],
-            examDate: null,
-            todayCount: 0,
-            viewedWords: []
+        const elements = {
+            userInfo: document.getElementById("userInfo"),
+            loginBtn: document.getElementById("loginBtn"),
+            logoutBtn: document.getElementById("logoutBtn"),
+            syncStatus: document.getElementById("syncStatus"),
+            syncStatusText: document.getElementById("syncStatusText"),
+            searchInput: document.getElementById("searchInput"),
+            searchBtn: document.getElementById("searchBtn"),
+            countdownDays: document.getElementById("countdownDays"),
+            countdownUnit: document.getElementById("countdownUnit"),
+            setExamDateBtn: document.getElementById("setExamDateBtn"),
+            pomodoroTimer: document.getElementById("pomodoroTimer"),
+            pomodoroStatus: document.getElementById("pomodoroStatus"),
+            startPomodoroBtn: document.getElementById("startPomodoroBtn"),
+            pausePomodoroBtn: document.getElementById("pausePomodoroBtn"),
+            resetPomodoroBtn: document.getElementById("resetPomodoroBtn"),
+            word: document.getElementById("word"),
+            phonetic: document.getElementById("phonetic"),
+            meaning: document.getElementById("meaning"),
+            toggleMeaningBtn: document.getElementById("toggleMeaningBtn"),
+            nextWordBtn: document.getElementById("nextWordBtn"),
+            todayCount: document.getElementById("todayCount"),
+            todoInput: document.getElementById("todoInput"),
+            addTodoBtn: document.getElementById("addTodoBtn"),
+            todoList: document.getElementById("todoList"),
+            projectList: document.getElementById("projectList"),
+            addProjectBtn: document.getElementById("addProjectBtn"),
+            websitesGrid: document.getElementById("websitesGrid"),
+            addWebsiteBtn: document.getElementById("addWebsiteBtn")
         };
 
+        let currentUser = null;
+        let unsubscribeSnapshot = null;
+        let activeWordIndex = null;
+        let userData = createDefaultData();
         let pomodoroInterval = null;
         let pomodoroSeconds = 25 * 60;
         let pomodoroRunning = false;
 
-        // 登录相关
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                document.getElementById('userInfo').innerHTML = `
-                    <img src="${user.photoURL}" class="user-avatar">
-                    <div><div class="user-name">${user.displayName}</div></div>
-                `;
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('logoutBtn').style.display = 'inline-block';
-                loadUserData(user.uid);
-            } else {
-                document.getElementById('userInfo').innerHTML = '<div class="login-prompt">🔐 请先登录以同步数据</div>';
-                document.getElementById('loginBtn').style.display = 'inline-block';
-                document.getElementById('logoutBtn').style.display = 'none';
-                loadLocalData();
-            }
-        });
+        function todayKey(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }
 
-        window.login = async () => {
+        function isToday(value) {
+            return value === todayKey() || value === new Date().toDateString();
+        }
+
+        function cloneDefaultWebsites() {
+            return defaultWebsites.map((site) => ({ ...site }));
+        }
+
+        function createDefaultData() {
+            return {
+                websites: cloneDefaultWebsites(),
+                todos: [],
+                projects: [],
+                examDate: null,
+                todayCount: 0,
+                viewedWords: [],
+                lastDate: todayKey()
+            };
+        }
+
+        function parseJson(value) {
+            if (!value) return null;
             try {
-                await signInWithPopup(auth, provider);
+                return JSON.parse(value);
             } catch (error) {
-                alert('登录失败: ' + error.message);
+                console.warn("本地数据解析失败，已使用默认数据。", error);
+                return null;
             }
-        };
+        }
 
-        window.logout = async () => {
-            await signOut(auth);
-            userData = { websites: [...defaultWebsites], todos: [], projects: [], examDate: null, todayCount: 0, viewedWords: [] };
-            renderAll();
-        };
+        function asText(value) {
+            return typeof value === "string" ? value.trim() : "";
+        }
 
-        function loadUserData(uid) {
-            const docRef = doc(db, 'users', uid);
-            onSnapshot(docRef, (snap) => {
-                if (snap.exists()) {
-                    const data = snap.data();
-                    userData = { ...userData, ...data };
-                    if (!userData.websites) userData.websites = [...defaultWebsites];
-                    if (!userData.todos) userData.todos = [];
-                    if (!userData.projects) userData.projects = [];
+        function normalizeUrl(input) {
+            const raw = asText(input);
+            if (!raw) return null;
+            const withProtocol = /^[a-z][a-z0-9+.-]*:/i.test(raw) ? raw : `https://${raw}`;
+
+            try {
+                const url = new URL(withProtocol);
+                if (url.protocol !== "http:" && url.protocol !== "https:") {
+                    return null;
                 }
-                renderAll();
-                updateCountdown();
+                return url.href;
+            } catch {
+                return null;
+            }
+        }
+
+        function normalizeWebsites(websites) {
+            if (!Array.isArray(websites)) return cloneDefaultWebsites();
+            return websites
+                .map((site) => ({
+                    name: asText(site?.name),
+                    url: normalizeUrl(site?.url),
+                    desc: asText(site?.desc)
+                }))
+                .filter((site) => site.name && site.url);
+        }
+
+        function normalizeTodos(todos) {
+            if (!Array.isArray(todos)) return [];
+            return todos
+                .map((todo) => ({
+                    id: asText(todo?.id) || String(todo?.id || makeId("todo")),
+                    text: asText(todo?.text),
+                    completed: Boolean(todo?.completed)
+                }))
+                .filter((todo) => todo.text);
+        }
+
+        function normalizeProjects(projects) {
+            if (!Array.isArray(projects)) return [];
+            return projects
+                .map((project) => ({
+                    id: asText(project?.id) || String(project?.id || makeId("project")),
+                    name: asText(project?.name),
+                    desc: asText(project?.desc),
+                    status: asText(project?.status) || "进行中"
+                }))
+                .filter((project) => project.name);
+        }
+
+        function normalizeViewedWords(viewedWords) {
+            if (!Array.isArray(viewedWords)) return [];
+            const validIndexes = viewedWords
+                .map((index) => Number(index))
+                .filter((index) => Number.isInteger(index) && index >= 0 && index < cet6Words.length);
+            return Array.from(new Set(validIndexes));
+        }
+
+        function normalizeUserData(data) {
+            const base = createDefaultData();
+            const source = data && typeof data === "object" ? data : {};
+            const normalized = {
+                ...base,
+                ...source,
+                websites: Array.isArray(source.websites) ? normalizeWebsites(source.websites) : base.websites,
+                todos: normalizeTodos(source.todos),
+                projects: normalizeProjects(source.projects),
+                examDate: asText(source.examDate) || null,
+                todayCount: Math.max(0, Number(source.todayCount) || 0),
+                viewedWords: normalizeViewedWords(source.viewedWords),
+                lastDate: asText(source.lastDate) || todayKey()
+            };
+
+            if (!isToday(normalized.lastDate)) {
+                normalized.todayCount = 0;
+                normalized.viewedWords = [];
+                normalized.lastDate = todayKey();
+            } else {
+                normalized.lastDate = todayKey();
+            }
+
+            normalized.todayCount = Math.min(normalized.todayCount, normalized.viewedWords.length || normalized.todayCount);
+            return normalized;
+        }
+
+        function resetDailyWordProgressIfNeeded() {
+            if (!isToday(userData.lastDate)) {
+                userData.todayCount = 0;
+                userData.viewedWords = [];
+                userData.lastDate = todayKey();
+                elements.todayCount.textContent = "0";
+                return;
+            }
+
+            userData.lastDate = todayKey();
+            userData.viewedWords = normalizeViewedWords(userData.viewedWords);
+            userData.todayCount = Math.max(0, Number(userData.todayCount) || 0);
+        }
+
+        function makeId(prefix) {
+            if (crypto?.randomUUID) {
+                return `${prefix}-${crypto.randomUUID()}`;
+            }
+            return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        }
+
+        function dataForStorage() {
+            userData = normalizeUserData(userData);
+            return {
+                websites: userData.websites,
+                todos: userData.todos,
+                projects: userData.projects,
+                examDate: userData.examDate,
+                todayCount: userData.todayCount,
+                viewedWords: userData.viewedWords,
+                lastDate: userData.lastDate
+            };
+        }
+
+        function readLocalData() {
+            const current = parseJson(localStorage.getItem(STORAGE_KEY));
+            if (current) return normalizeUserData(current);
+
+            const legacyStats = parseJson(localStorage.getItem(LEGACY_STATS_KEY)) || {};
+            const legacyWebsites = parseJson(localStorage.getItem(LEGACY_WEBSITES_KEY));
+            return normalizeUserData({
+                ...legacyStats,
+                websites: Array.isArray(legacyWebsites) ? legacyWebsites : undefined
             });
         }
 
-        function saveUserData() {
+        function saveLocalData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForStorage()));
+        }
+
+        async function saveUserData() {
+            const payload = dataForStorage();
+
             if (!currentUser) {
-                localStorage.setItem('userData', JSON.stringify(userData));
+                saveLocalData();
                 return;
             }
-            const docRef = doc(db, 'users', currentUser.uid);
-            setDoc(docRef, { ...userData, updatedAt: new Date().toISOString() });
+
+            try {
+                const userDocRef = doc(db, "users", currentUser.uid);
+                await setDoc(userDocRef, {
+                    ...payload,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                setSyncStatus("已同步到云端");
+            } catch (error) {
+                console.error("保存数据失败:", error);
+                setSyncStatus("同步失败");
+            }
         }
 
-        function loadLocalData() {
-            const saved = localStorage.getItem('userData');
-            if (saved) {
-                userData = JSON.parse(saved);
+        function setSyncStatus(text) {
+            if (!currentUser) {
+                elements.syncStatus.style.display = "none";
+                return;
             }
-            renderAll();
+
+            elements.syncStatusText.textContent = text;
+            elements.syncStatus.style.display = "inline-flex";
+        }
+
+        function clearFirestoreListener() {
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot();
+                unsubscribeSnapshot = null;
+            }
+        }
+
+        function loadUserData(uid) {
+            clearFirestoreListener();
+            const userDocRef = doc(db, "users", uid);
+            setSyncStatus("正在同步...");
+
+            unsubscribeSnapshot = onSnapshot(userDocRef, async (snapshot) => {
+                if (snapshot.exists()) {
+                    userData = normalizeUserData(snapshot.data());
+                    setSyncStatus("已同步到云端");
+                } else {
+                    userData = readLocalData();
+                    await saveUserData();
+                }
+                renderAll();
+            }, (error) => {
+                console.error("加载云端数据失败:", error);
+                setSyncStatus("同步失败");
+                userData = readLocalData();
+                renderAll();
+            });
+        }
+
+        function showUserInfo(user) {
+            elements.userInfo.replaceChildren();
+
+            const avatar = document.createElement("img");
+            avatar.className = "user-avatar";
+            avatar.alt = "头像";
+            avatar.referrerPolicy = "no-referrer";
+            avatar.src = user.photoURL || "https://via.placeholder.com/80?text=U";
+
+            const textWrap = document.createElement("div");
+            const name = document.createElement("div");
+            name.className = "user-name";
+            name.textContent = user.displayName || "用户";
+
+            const email = document.createElement("div");
+            email.className = "user-email";
+            email.textContent = user.email || "";
+
+            textWrap.append(name, email);
+            elements.userInfo.append(avatar, textWrap);
+            elements.loginBtn.style.display = "none";
+            elements.logoutBtn.style.display = "inline-flex";
+            setSyncStatus("正在同步...");
+        }
+
+        function showLoginPrompt() {
+            elements.userInfo.replaceChildren();
+            const prompt = document.createElement("div");
+            prompt.className = "login-prompt";
+            prompt.textContent = "请先登录以同步数据";
+            elements.userInfo.append(prompt);
+            elements.loginBtn.style.display = "inline-flex";
+            elements.logoutBtn.style.display = "none";
+            elements.syncStatus.style.display = "none";
+        }
+
+        function renderAll() {
+            userData = normalizeUserData(userData);
+            elements.todayCount.textContent = String(userData.todayCount);
+            renderTodos();
+            renderProjects();
+            renderWebsites();
             updateCountdown();
+            ensureWordShown();
         }
 
-        // 快速搜索
-        window.quickSearch = () => {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) return;
-            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-        };
+        function addEmptyState(parent, text, tagName = "div") {
+            const empty = document.createElement(tagName);
+            empty.className = "empty-state";
+            empty.textContent = text;
+            parent.append(empty);
+        }
 
-        // 倒计时
-        window.setExamDate = () => {
-            const dateStr = prompt('输入六级考试日期（格式：2026-12-15）：');
-            if (dateStr) {
-                userData.examDate = dateStr;
-                saveUserData();
-                updateCountdown();
+        function renderTodos() {
+            elements.todoList.replaceChildren();
+            if (!userData.todos.length) {
+                addEmptyState(elements.todoList, "暂无待办", "li");
+                return;
             }
-        };
+
+            userData.todos.forEach((todo) => {
+                const item = document.createElement("li");
+                item.className = todo.completed ? "todo-item completed" : "todo-item";
+
+                const checkbox = document.createElement("input");
+                checkbox.className = "todo-checkbox";
+                checkbox.type = "checkbox";
+                checkbox.checked = todo.completed;
+                checkbox.addEventListener("change", () => toggleTodo(todo.id));
+
+                const text = document.createElement("span");
+                text.className = "todo-text";
+                text.textContent = todo.text;
+
+                const remove = document.createElement("button");
+                remove.className = "btn btn-danger btn-small";
+                remove.type = "button";
+                remove.textContent = "删除";
+                remove.addEventListener("click", () => deleteTodo(todo.id));
+
+                item.append(checkbox, text, remove);
+                elements.todoList.append(item);
+            });
+        }
+
+        function renderProjects() {
+            elements.projectList.replaceChildren();
+            if (!userData.projects.length) {
+                addEmptyState(elements.projectList, "暂无项目");
+                return;
+            }
+
+            userData.projects.forEach((project) => {
+                const item = document.createElement("div");
+                item.className = "project-item";
+
+                const main = document.createElement("div");
+                main.className = "project-main";
+
+                const name = document.createElement("div");
+                name.className = "project-name";
+                name.textContent = project.name;
+
+                const desc = document.createElement("div");
+                desc.className = "project-desc";
+                desc.textContent = project.desc || "未填写描述";
+
+                const status = document.createElement("span");
+                status.className = "project-status";
+                status.textContent = project.status;
+
+                const remove = document.createElement("button");
+                remove.className = "btn btn-danger btn-small";
+                remove.type = "button";
+                remove.textContent = "删除";
+                remove.addEventListener("click", () => deleteProject(project.id));
+
+                main.append(name, desc, status);
+                item.append(main, remove);
+                elements.projectList.append(item);
+            });
+        }
+
+        function renderWebsites() {
+            elements.websitesGrid.replaceChildren();
+            if (!userData.websites.length) {
+                addEmptyState(elements.websitesGrid, "暂无网站");
+                return;
+            }
+
+            userData.websites.forEach((site, index) => {
+                const card = document.createElement("div");
+                card.className = "website-card";
+
+                const link = document.createElement("a");
+                link.className = "website-link";
+                link.href = site.url;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                const name = document.createElement("div");
+                name.className = "website-name";
+                name.textContent = site.name;
+
+                const desc = document.createElement("div");
+                desc.className = "website-desc";
+                desc.textContent = site.desc;
+
+                const remove = document.createElement("button");
+                remove.className = "delete-site-btn";
+                remove.type = "button";
+                remove.title = "删除";
+                remove.setAttribute("aria-label", `删除 ${site.name}`);
+                remove.textContent = "×";
+                remove.addEventListener("click", () => deleteWebsite(index));
+
+                link.append(name, desc);
+                card.append(link, remove);
+                elements.websitesGrid.append(card);
+            });
+        }
+
+        function randomWordIndex() {
+            return Math.floor(Math.random() * cet6Words.length);
+        }
+
+        function ensureWordShown() {
+            if (activeWordIndex === null) {
+                displayWord(randomWordIndex(), false);
+            }
+        }
+
+        function displayWord(index, countAsViewed) {
+            const wordData = cet6Words[index];
+            if (!wordData) return;
+
+            activeWordIndex = index;
+            elements.word.textContent = wordData.word;
+            elements.phonetic.textContent = wordData.phonetic;
+            elements.meaning.textContent = wordData.meaning;
+            elements.meaning.classList.remove("show");
+            elements.toggleMeaningBtn.textContent = "显示释义";
+
+            if (countAsViewed) {
+                resetDailyWordProgressIfNeeded();
+                if (!userData.viewedWords.includes(index)) {
+                    const baseCount = Math.max(userData.todayCount, userData.viewedWords.length);
+                    userData.viewedWords.push(index);
+                    userData.todayCount = Math.max(baseCount + 1, userData.viewedWords.length);
+                    userData.lastDate = todayKey();
+                    elements.todayCount.textContent = String(userData.todayCount);
+                    saveUserData();
+                }
+            }
+        }
+
+        function nextWord() {
+            displayWord(randomWordIndex(), true);
+        }
+
+        function toggleMeaning() {
+            const isVisible = elements.meaning.classList.toggle("show");
+            elements.toggleMeaningBtn.textContent = isVisible ? "隐藏释义" : "显示释义";
+        }
+
+        function quickSearch() {
+            const query = elements.searchInput.value.trim();
+            if (!query) return;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, "_blank", "noopener,noreferrer");
+        }
 
         function updateCountdown() {
             if (!userData.examDate) {
-                document.getElementById('countdownDays').textContent = '未设置';
+                elements.countdownDays.textContent = "未设置";
+                elements.countdownUnit.textContent = "天";
                 return;
             }
+
+            const target = new Date(`${userData.examDate}T00:00:00`);
+            if (Number.isNaN(target.getTime())) {
+                elements.countdownDays.textContent = "日期无效";
+                elements.countdownUnit.textContent = "请重新设置";
+                return;
+            }
+
             const today = new Date();
-            const exam = new Date(userData.examDate);
-            const diff = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
-            document.getElementById('countdownDays').textContent = diff > 0 ? diff : '已过期';
+            today.setHours(0, 0, 0, 0);
+            const diff = Math.ceil((target - today) / 86400000);
+            elements.countdownDays.textContent = diff >= 0 ? String(diff) : "已过期";
+            elements.countdownUnit.textContent = diff >= 0 ? "天" : "请重新设置";
         }
 
-        // 番茄钟
-        window.startPomodoro = () => {
-            if (pomodoroRunning) return;
-            pomodoroRunning = true;
-            pomodoroInterval = setInterval(() => {
-                pomodoroSeconds--;
-                if (pomodoroSeconds <= 0) {
-                    alert('⏰ 时间到！休息一下吧！');
-                    resetPomodoro();
-                }
-                updatePomodoroDisplay();
-            }, 1000);
-        };
+        function setExamDate() {
+            const dateStr = prompt("输入六级考试日期（格式：2026-12-15）：", userData.examDate || "");
+            if (dateStr === null) return;
 
-        window.pausePomodoro = () => {
-            pomodoroRunning = false;
-            clearInterval(pomodoroInterval);
-        };
+            const value = dateStr.trim();
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(new Date(`${value}T00:00:00`).getTime())) {
+                alert("请输入有效日期，例如：2026-12-15");
+                return;
+            }
 
-        window.resetPomodoro = () => {
-            pomodoroRunning = false;
-            clearInterval(pomodoroInterval);
-            pomodoroSeconds = 25 * 60;
-            updatePomodoroDisplay();
-        };
+            userData.examDate = value;
+            updateCountdown();
+            saveUserData();
+        }
 
         function updatePomodoroDisplay() {
             const mins = Math.floor(pomodoroSeconds / 60);
             const secs = pomodoroSeconds % 60;
-            document.getElementById('pomodoroTimer').textContent =
-                `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            elements.pomodoroTimer.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
         }
 
-        // 单词学习
-        window.nextWord = () => {
-            const word = cet6Words[Math.floor(Math.random() * cet6Words.length)];
-            document.getElementById('word').textContent = word.word;
-            document.getElementById('phonetic').textContent = word.phonetic;
-            document.getElementById('meaning').textContent = word.meaning;
-            document.getElementById('meaning').classList.remove('show');
-            userData.todayCount++;
-            document.getElementById('todayCount').textContent = userData.todayCount;
-            saveUserData();
-        };
+        function startPomodoro() {
+            if (pomodoroRunning) return;
+            pomodoroRunning = true;
+            elements.pomodoroStatus.textContent = "专注中";
+            pomodoroInterval = setInterval(() => {
+                pomodoroSeconds -= 1;
+                if (pomodoroSeconds <= 0) {
+                    resetPomodoro();
+                    alert("时间到！休息一下吧。");
+                    return;
+                }
+                updatePomodoroDisplay();
+            }, 1000);
+        }
 
-        window.toggleMeaning = () => {
-            document.getElementById('meaning').classList.toggle('show');
-        };
+        function pausePomodoro() {
+            pomodoroRunning = false;
+            clearInterval(pomodoroInterval);
+            elements.pomodoroStatus.textContent = "已暂停";
+        }
 
-        // 待办事项
-        window.addTodo = () => {
-            const text = document.getElementById('todoInput').value.trim();
+        function resetPomodoro() {
+            pomodoroRunning = false;
+            clearInterval(pomodoroInterval);
+            pomodoroSeconds = 25 * 60;
+            elements.pomodoroStatus.textContent = "专注 25 分钟，休息 5 分钟";
+            updatePomodoroDisplay();
+        }
+
+        function addTodo() {
+            const text = elements.todoInput.value.trim();
             if (!text) return;
-            userData.todos.push({ text, completed: false, id: Date.now() });
-            document.getElementById('todoInput').value = '';
-            saveUserData();
-            renderTodos();
-        };
 
-        window.toggleTodo = (id) => {
-            const todo = userData.todos.find(t => t.id === id);
-            if (todo) todo.completed = !todo.completed;
-            saveUserData();
+            userData.todos.push({ id: makeId("todo"), text, completed: false });
+            elements.todoInput.value = "";
             renderTodos();
-        };
-
-        window.deleteTodo = (id) => {
-            userData.todos = userData.todos.filter(t => t.id !== id);
             saveUserData();
-            renderTodos();
-        };
-
-        function renderTodos() {
-            const list = document.getElementById('todoList');
-            list.innerHTML = userData.todos.map(todo => `
-                <li class="todo-item ${todo.completed ? 'completed' : ''}">
-                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.id})">
-                    <span class="todo-text">${todo.text}</span>
-                    <button class="todo-delete" onclick="deleteTodo(${todo.id})">删除</button>
-                </li>
-            `).join('');
         }
 
-        // 硬件项目
-        window.addProject = () => {
-            const name = prompt('项目名称：');
-            if (!name) return;
-            const desc = prompt('项目描述：') || '';
-            const status = prompt('状态（进行中/已完成/计划中）：') || '进行中';
-            userData.projects.push({ name, desc, status, id: Date.now() });
-            saveUserData();
-            renderProjects();
-        };
+        function toggleTodo(id) {
+            const todo = userData.todos.find((item) => item.id === id);
+            if (!todo) return;
 
-        window.deleteProject = (id) => {
-            if (confirm('确定删除这个项目吗？')) {
-                userData.projects = userData.projects.filter(p => p.id !== id);
-                saveUserData();
-                renderProjects();
+            todo.completed = !todo.completed;
+            renderTodos();
+            saveUserData();
+        }
+
+        function deleteTodo(id) {
+            userData.todos = userData.todos.filter((todo) => todo.id !== id);
+            renderTodos();
+            saveUserData();
+        }
+
+        function addProject() {
+            const name = prompt("项目名称：");
+            if (!name?.trim()) return;
+
+            const desc = prompt("项目描述：") || "";
+            const status = prompt("状态（进行中 / 已完成 / 计划中）：") || "进行中";
+            userData.projects.push({
+                id: makeId("project"),
+                name: name.trim(),
+                desc: desc.trim(),
+                status: status.trim() || "进行中"
+            });
+            renderProjects();
+            saveUserData();
+        }
+
+        function deleteProject(id) {
+            if (!confirm("确定删除这个项目吗？")) return;
+            userData.projects = userData.projects.filter((project) => project.id !== id);
+            renderProjects();
+            saveUserData();
+        }
+
+        function addWebsite() {
+            const name = prompt("网站名称：");
+            if (!name?.trim()) return;
+
+            const urlInput = prompt("网站地址（例如：https://www.example.com）：");
+            const url = normalizeUrl(urlInput);
+            if (!url) {
+                alert("请输入有效的网址，支持 http 或 https。");
+                return;
             }
-        };
 
-        function renderProjects() {
-            const list = document.getElementById('projectList');
-            list.innerHTML = userData.projects.map(proj => `
-                <div class="project-item">
-                    <div class="project-name">${proj.name}</div>
-                    <div class="project-desc">${proj.desc}</div>
-                    <span class="project-status">${proj.status}</span>
-                    <button onclick="deleteProject(${proj.id})" style="float: right; font-size: 12px; padding: 5px 10px; background: #ef4444;">删除</button>
-                </div>
-            `).join('');
-        }
-
-        // 网站导航
-        window.addWebsite = () => {
-            const name = prompt('网站名称：');
-            if (!name) return;
-            const url = prompt('网站地址：');
-            if (!url) return;
-            const desc = prompt('描述：') || '';
-            userData.websites.push({ name, url, desc });
+            const desc = prompt("描述（可选）：") || "";
+            userData.websites.push({ name: name.trim(), url, desc: desc.trim() });
+            renderWebsites();
             saveUserData();
-            renderWebsites();
-        };
-
-        function renderWebsites() {
-            const grid = document.getElementById('websitesGrid');
-            grid.innerHTML = userData.websites.map(site => `
-                <a href="${site.url}" target="_blank" class="website-card">
-                    <div class="website-name">${site.name}</div>
-                    <div class="website-desc">${site.desc}</div>
-                </a>
-            `).join('');
         }
 
-        function renderAll() {
-            renderTodos();
-            renderProjects();
+        function deleteWebsite(index) {
+            if (!confirm("确定要删除这个网站吗？")) return;
+            userData.websites.splice(index, 1);
             renderWebsites();
-            document.getElementById('todayCount').textContent = userData.todayCount || 0;
-            nextWord();
+            saveUserData();
         }
 
-        // 初始化
+        elements.searchBtn.addEventListener("click", quickSearch);
+        elements.searchInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") quickSearch();
+        });
+        elements.loginBtn.addEventListener("click", async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("登录失败:", error);
+                alert(`登录失败：${error.message}`);
+            }
+        });
+        elements.logoutBtn.addEventListener("click", async () => {
+            try {
+                clearFirestoreListener();
+                await signOut(auth);
+            } catch (error) {
+                console.error("登出失败:", error);
+                alert(`登出失败：${error.message}`);
+            }
+        });
+        elements.setExamDateBtn.addEventListener("click", setExamDate);
+        elements.startPomodoroBtn.addEventListener("click", startPomodoro);
+        elements.pausePomodoroBtn.addEventListener("click", pausePomodoro);
+        elements.resetPomodoroBtn.addEventListener("click", resetPomodoro);
+        elements.toggleMeaningBtn.addEventListener("click", toggleMeaning);
+        elements.nextWordBtn.addEventListener("click", nextWord);
+        elements.addTodoBtn.addEventListener("click", addTodo);
+        elements.todoInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") addTodo();
+        });
+        elements.addProjectBtn.addEventListener("click", addProject);
+        elements.addWebsiteBtn.addEventListener("click", addWebsite);
+
+        showLoginPrompt();
+        userData = readLocalData();
         renderAll();
-        updateCountdown();
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                showUserInfo(user);
+                loadUserData(user.uid);
+            } else {
+                clearFirestoreListener();
+                showLoginPrompt();
+                userData = readLocalData();
+                renderAll();
+            }
+        });
+
+        updatePomodoroDisplay();
         setInterval(updateCountdown, 60000);
+
+        window.homepageDebug = {
+            getData: () => structuredClone(dataForStorage()),
+            showWordWithoutCounting: () => displayWord(randomWordIndex(), false)
+        };
     </script>
 </body>
 </html>
